@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* Style for the container holding the image, canvas, and text */
+    .component-container {
+      position: relative;
+      width: 100%;
+      max-width: 600px; /* Adjust as needed */
+      margin: 0 auto;
+    }
+
+    /* Style for the image background */
+    .background-image {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .draggable {
+      cursor: move;
+    }
+
+    /* Style for the canvas element */
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Style for the text */
+    .overlay-text {
+      position: absolute;
+      top: 50%; /* Adjust to position the text vertically */
+      left: 50%; /* Adjust to position the text horizontally */
+      transform: translate(-50%, -50%);
+      color: white;
+      font-family: 'Arial', sans-serif; /* Change the font family */
+      font-size: 24px; /* Change the font size */
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<div class="component-container">
+  <img class="background-image" src="https://images.unsplash.com/photo-1682687982502-b05f0565753a?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Background Image" crossorigin="anonymous">
+  <canvas id="myCanvas"></canvas>
+  <div id="overlayText" class="overlay-text draggable" contenteditable="true">Your Text Here</div>
+  
+</div>
+<button id="saveButton">Save Image</button>
+<script>
+  // JavaScript code for making the text draggable and saving the image
+  var textElement = document.getElementById("overlayText");
+  var saveButton = document.getElementById("saveButton");
+  var componentContainer = document.querySelector(".component-container");
+
+  var offsetX, offsetY, isDragging = false;
+
+  textElement.addEventListener("mousedown", function(e) {
+    isDragging = true;
+    offsetX = e.clientX - textElement.getBoundingClientRect().left;
+    offsetY = e.clientY - textElement.getBoundingClientRect().top;
+  });
+
+  document.addEventListener("mousemove", function(e) {
+    if (isDragging) {
+      var x = e.clientX - offsetX;
+      var y = e.clientY - offsetY;
+
+      textElement.style.left = x + "px";
+      textElement.style.top = y + "px";
+    }
+  });
+
+  document.addEventListener("mouseup", function() {
+    isDragging = false;
+  });
+
+  saveButton.addEventListener("click", function() {
+    // Create a new canvas to compose the image
+    var composedCanvas = document.createElement("canvas");
+    var ctx = composedCanvas.getContext("2d");
+
+    // Set the canvas size to match the component container
+    composedCanvas.width = componentContainer.offsetWidth;
+    composedCanvas.height = componentContainer.offsetHeight;
+
+    // Draw the background image onto the composed canvas
+    ctx.drawImage(document.querySelector(".background-image"), 0, 0, composedCanvas.width, composedCanvas.height);
+
+    // Draw the text onto the composed canvas
+    ctx.fillStyle = "white";
+    ctx.font = window.getComputedStyle(textElement).font;
+    var textX = textElement.offsetLeft + textElement.offsetWidth / 2;
+    var textY = textElement.offsetTop + textElement.offsetHeight / 2;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(textElement.innerText, textX, textY);
+
+    // Create a link element to trigger the download
+    var downloadLink = document.createElement("a");
+    downloadLink.href = composedCanvas.toDataURL("image/png");
+    downloadLink.download = "composed_image.png";
+
+    // Trigger the click event to start the download
+    downloadLink.click();
+  });
+</script>
+
+</body>
+</html>
