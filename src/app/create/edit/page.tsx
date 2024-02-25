@@ -13,12 +13,13 @@ interface PexelsImage {
     // Add other necessary properties
   }
 function EditPage() {
-    const storedPoem = localStorage.getItem('poem');
-    const parsedPoem = storedPoem ? JSON.parse(storedPoem) : '';
-    const formattedPoem = parsedPoem.replace(/\\t/g, '\t');
-  
     const [fontSize, setFontSize] = useState(16); // Initial font size
-  
+    useEffect(() => {
+        // Perform localStorage action
+        const storedPoem = localStorage.getItem('poem');
+        const parsedPoem = storedPoem ? JSON.parse(storedPoem) : '';
+        const formattedPoem = parsedPoem.replace(/\\t/g, '\t');
+      }, [])
     const handleSliderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setFontSize(parseInt(event.target.value, 10));
     };
@@ -28,21 +29,21 @@ function EditPage() {
     const [searchQuery, setSearchQuery] = useState('');
   
     useEffect(() => {
-        const fetchImages = async () => {
-            try {
-              const response = await axios.get(
-                `/api/v1/search?query=${searchQuery}`,
-                {
-                  headers: {
-                    Authorization: 'Bearer 4o0UtnFDXW7lWj0oB4MORmhk1H3PicSS6N3c9qqajV52OuMf1fA7ZnjQ',
-                  },
-                }
-              );
-              setImages(response.data.photos);
-            } catch (error) {
-              console.error('Error fetching images:', error);
+      const fetchImages = async () => {
+        try {
+          const response = await axios.get(
+            `https://api.pexels.com/v1/search?query=${searchQuery}`,
+            {
+              headers: {
+                Authorization: '4o0UtnFDXW7lWj0oB4MORmhk1H3PicSS6N3c9qqajV52OuMf1fA7ZnjQ',
+              },
             }
-          };
+          );
+          setImages(response.data.photos);
+        } catch (error) {
+          console.error('Error fetching images:', error);
+        }
+      };
   
       fetchImages();
     }, [searchQuery]);
