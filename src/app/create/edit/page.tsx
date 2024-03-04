@@ -35,7 +35,7 @@ function EditPage() {
             `https://api.pexels.com/v1/search?query=${searchQuery}`,
             {
               headers: {
-                Authorization: '4o0UtnFDXW7lWj0oB4MORmhk1H3PicSS6N3c9qqajV52OuMf1fA7ZnjQ',
+                Authorization: "4o0UtnFDXW7lWj0oB4MORmhk1H3PicSS6N3c9qqajV52OuMf1fA7ZnjQ",
               },
             }
           );
@@ -53,8 +53,8 @@ function EditPage() {
     };
   
     return (
-      <div className="flex">
-        <div className="w-1/2 p-8 bg-blue-500">
+      <div className="flex" style={{opacity:0}}>
+        <div className="w-1/2 p-8 bg-blue-500" style={{ width:"500px",height:"500px"}}>
           {/* Left part with colored image/canvas */}
           {selectedImage ? (
             <img
