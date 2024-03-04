@@ -62,8 +62,7 @@ function Page() {
         className="p-2 border rounded focus:outline-none focus:border-blue-500 transition duration-300"
       />
       <Link  href={{
-    pathname: '/create/edit',
-    query: data // the data
+    pathname: '/create/edit'
   }} 
   className="max-w-screen-md">
       <Button
