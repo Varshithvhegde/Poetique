@@ -16,10 +16,7 @@ import {
   UnderlineIcon,
 } from "@radix-ui/react-icons";
 
-import {
-  ToggleGroup,
-  ToggleGroupItem,
-} from "@/components/ui/toggle-group";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { TextStyleToggleGroup } from "@/components/toggle-group/TextStyleToggleGroup";
 // import { toPng } from "html-to-image"; // Import the toPng function
 // Interface for PexelsImage
@@ -62,7 +59,7 @@ const options = {
   useCORS: true,
   removeContainer: true,
 };
-const PoemContainer = styled.div<{ fontSize: number }>`
+const PoemContainer = styled.div<{ fontSize: number; appliedStyles: string }>`
   color: black; /* Default color */
   font-size: ${(props) => props.fontSize}px;
   z-index: 4; /* Change the z-index value to bring the text above the image */
@@ -70,10 +67,9 @@ const PoemContainer = styled.div<{ fontSize: number }>`
   position: absolute;
   cursor: move;
   touch-action: none;
-  // font-weight: bold;
-  // font-style :italic;
-  // font-family: "Times New Roman", Times, serif;
+  ${({ appliedStyles }) => appliedStyles}
 `;
+
 const SliderContainer = styled.div`
   display: flex;
   align-items: center;
@@ -220,15 +216,36 @@ function EditPage() {
 
   const handleTextStyleToggle = (style: string) => {
     const updatedStyles = new Set(textStyles);
+
+    // Handle text align styles
+    if (style.includes("align-")) {
+      updatedStyles.forEach((existingStyle) => {
+        if (existingStyle.startsWith("align-")) {
+          updatedStyles.delete(existingStyle);
+        }
+      });
+    }
+
+    // Handle text color style
+    if (style.startsWith("text-color-")) {
+      updatedStyles.forEach((existingStyle) => {
+        if (existingStyle.startsWith("text-color-")) {
+          updatedStyles.delete(existingStyle);
+        }
+      });
+    }
+
+    // Add or remove the style
     if (updatedStyles.has(style)) {
       updatedStyles.delete(style);
     } else {
       updatedStyles.add(style);
     }
-    setTextStyles(updatedStyles);
+
+    setTextStyles(new Set(Array.from(updatedStyles)));
   };
 
-  const appliedStyles = Array.from(textStyles).join(' ');
+  const appliedStyles = Array.from(textStyles).join(" ");
 
   return (
     <div className="flex flex-col lg:flex-row">
@@ -260,21 +277,33 @@ function EditPage() {
                 onDrag={(e, data) => setPosition({ x: data.x, y: data.y })}
               >
                 <PoemContainer
-  fontSize={fontSize}
-  onClick={handleTextClick}
-  contentEditable={false}
-  style={{
-    position: "absolute",
-    width: "fit-content",
-    height: "fit-content",
-    textAlign: "center",
-    zIndex: 3,
-    fontWeight: textStyles.has("bold") ? "bold" : "normal",
-    fontStyle: textStyles.has("italic") ? "italic" : "normal",
-    textDecoration: textStyles.has("underline") ? "underline" : "none",
-  }}
-  dangerouslySetInnerHTML={{ __html: poem }}
-/>
+                  fontSize={fontSize}
+                  onClick={handleTextClick}
+                  contentEditable={false}
+                  appliedStyles={appliedStyles}
+                  style={{
+                    position: "absolute",
+                    width: "fit-content",
+                    height: "fit-content",
+                    textAlign: textStyles.has("align-center")
+                      ? "center"
+                      : textStyles.has("align-left")
+                      ? "left"
+                      : textStyles.has("align-right")
+                      ? "right"
+                      : "center",
+                    zIndex: 3,
+                    fontWeight: textStyles.has("bold") ? "bold" : "normal",
+                    fontStyle: textStyles.has("italic") ? "italic" : "normal",
+                    textDecoration: textStyles.has("underline")
+                      ? "underline"
+                      : "none",
+                    color: Array.from(textStyles)
+                      .find((style) => style.startsWith("text-color-"))
+                      ?.replace("text-color-", ""),
+                  }}
+                  dangerouslySetInnerHTML={{ __html: poem }}
+                />
               </Draggable>
             )}
           </ColoredCanvas>
@@ -366,12 +395,12 @@ function EditPage() {
             />
           </TabsContent>
           <TabsContent value="text">
-          <div className="mb-4">
-    <TextStyleToggleGroup
-      textStyles={textStyles}
-      onTextStyleToggle={handleTextStyleToggle}
-    />
-  </div>
+            <div className="mb-4">
+              <TextStyleToggleGroup
+                textStyles={textStyles}
+                onTextStyleToggle={handleTextStyleToggle}
+              />
+            </div>
           </TabsContent>
         </Tabs>
       </div>
