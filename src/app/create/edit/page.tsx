@@ -59,9 +59,8 @@ const options = {
   useCORS: true,
   removeContainer: true,
 };
-const PoemContainer = styled.div<{ fontSize: number; appliedStyles: string }>`
+const PoemContainer = styled.div<{ appliedStyles: string }>`
   color: black; /* Default color */
-  font-size: ${(props) => props.fontSize}px;
   z-index: 4; /* Change the z-index value to bring the text above the image */
   user-select: none; /* Make the text unselectable */
   position: absolute;
@@ -192,10 +191,6 @@ function EditPage() {
     setSelectedImage(null);
   };
 
-  const handleTextClick = () => {
-    // setFontSize((prevFontSize) => (prevFontSize === 16 ? 20 : 16));
-  };
-
   const handleTextChange = (event: React.ChangeEvent<HTMLDivElement>) => {
     const formattedPoem = event.target.innerText.replace(/\n/g, "<br>");
     setPoem(formattedPoem);
@@ -216,7 +211,7 @@ function EditPage() {
 
   const handleTextStyleToggle = (style: string) => {
     const updatedStyles = new Set(textStyles);
-
+  
     // Handle text align styles
     if (style.includes("align-")) {
       updatedStyles.forEach((existingStyle) => {
@@ -225,7 +220,7 @@ function EditPage() {
         }
       });
     }
-
+  
     // Handle text color style
     if (style.startsWith("text-color-")) {
       updatedStyles.forEach((existingStyle) => {
@@ -234,16 +229,30 @@ function EditPage() {
         }
       });
     }
-
+  
     // Add or remove the style
     if (updatedStyles.has(style)) {
       updatedStyles.delete(style);
     } else {
       updatedStyles.add(style);
     }
-
+  
+    // Handle font size style
+    if (style.startsWith("font-size-")) {
+      // Remove existing font-size styles
+      updatedStyles.forEach((existingStyle) => {
+        if (existingStyle.startsWith("font-size-")) {
+          updatedStyles.delete(existingStyle);
+        }
+      });
+  
+      // Add the new font-size style
+      setFontSize(parseInt(style.replace("font-size-", ""), 10));
+    }
+  
     setTextStyles(new Set(Array.from(updatedStyles)));
-  };
+  }
+  
 
   const appliedStyles = Array.from(textStyles).join(" ");
 
@@ -277,33 +286,30 @@ function EditPage() {
                 onDrag={(e, data) => setPosition({ x: data.x, y: data.y })}
               >
                 <PoemContainer
-                  fontSize={fontSize}
-                  onClick={handleTextClick}
-                  contentEditable={false}
-                  appliedStyles={appliedStyles}
-                  style={{
-                    position: "absolute",
-                    width: "fit-content",
-                    height: "fit-content",
-                    textAlign: textStyles.has("align-center")
-                      ? "center"
-                      : textStyles.has("align-left")
-                      ? "left"
-                      : textStyles.has("align-right")
-                      ? "right"
-                      : "center",
-                    zIndex: 3,
-                    fontWeight: textStyles.has("bold") ? "bold" : "normal",
-                    fontStyle: textStyles.has("italic") ? "italic" : "normal",
-                    textDecoration: textStyles.has("underline")
-                      ? "underline"
-                      : "none",
-                    color: Array.from(textStyles)
-                      .find((style) => style.startsWith("text-color-"))
-                      ?.replace("text-color-", ""),
-                  }}
-                  dangerouslySetInnerHTML={{ __html: poem }}
-                />
+  contentEditable={false}
+  appliedStyles={appliedStyles}
+  style={{
+    position: "absolute",
+    width: "fit-content",
+    height: "fit-content",
+    textAlign: textStyles.has("align-center")
+      ? "center"
+      : textStyles.has("align-left")
+      ? "left"
+      : textStyles.has("align-right")
+      ? "right"
+      : "center",
+    zIndex: 3,
+    fontWeight: textStyles.has("bold") ? "bold" : "normal",
+    fontStyle: textStyles.has("italic") ? "italic" : "normal",
+    textDecoration: textStyles.has("underline") ? "underline" : "none",
+    color: Array.from(textStyles)
+      .find((style) => style.startsWith("text-color-"))
+      ?.replace("text-color-", ""),
+    fontSize: `${fontSize}px`, // Use the fontSize state here
+  }}
+  dangerouslySetInnerHTML={{ __html: poem }}
+/>
               </Draggable>
             )}
           </ColoredCanvas>
