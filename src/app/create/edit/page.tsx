@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import axios from "axios";
-import { toPng } from "html-to-image";
+import { toBlob, toPng } from "html-to-image";
 import React, { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import styled from "styled-components";
@@ -127,23 +127,30 @@ function EditPage() {
 
   const handleShareClick = async () => {
     try {
-      // Check if the Web Share API is supported
-      if (navigator.share) {
-        await navigator.share({
-          title: "Poetique Image",
-          text: "Check out this beautiful image poem!",
-          url: "https://poetique.vercel.app/",
+      // Use the ref instead of document.getElementById
+      if (canvasContainerRef.current) {
+        // Use toBlob to convert the container content to a Blob
+        const blob = await toBlob(canvasContainerRef.current, {
+          quality: 1.0,
         });
-      } else {
-        // Fallback for browsers that do not support Web Share API
-        // You can provide a link or any other sharing mechanism here
-        alert("Sharing is not supported on this browser.");
+  
+        if (navigator.share) {
+          await navigator.share({
+            title: "Poetique Image",
+            text: "Check out this beautiful image poem!",
+            files: [new File([blob], "poetique-image.png", { type: "image/png" })],
+          });
+        } else {
+          // Fallback for browsers that do not support Web Share API
+          // You can provide a link or any other sharing mechanism here
+          alert("Sharing is not supported on this browser.");
+        }
       }
     } catch (error) {
       console.error("Error sharing:", error);
     }
   };
-
+  
   useEffect(() => {
     const storedPoem = localStorage.getItem("poem");
     console.log(storedPoem, "storedPoem");
