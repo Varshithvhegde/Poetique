@@ -98,7 +98,7 @@ function EditPage() {
 
   const handleDownloadClick = async () => {
     // Use the ref instead of document.getElementById
-    if (canvasContainerRef.current && imageLoaded) {
+    if (canvasContainerRef.current) {
       try {
         // Use toPng from html-to-image to convert the container content to an image
         const dataUrl = await toPng(canvasContainerRef.current, {
@@ -146,17 +146,34 @@ function EditPage() {
   // };
 
   useEffect(() => {
-    const storedPoem = localStorage.getItem("poem");
-    const parsedPoem = storedPoem ? JSON.parse(storedPoem) : "";
-    const AuthorLocal = localStorage.getItem("author");
-    const TitleLocal = localStorage.getItem("title");
-    const formattedAuthor = AuthorLocal ? `-  ${AuthorLocal}` : "";
-    console.log(formattedAuthor, "Author");
-    const fullPoem = parsedPoem + "\n" + "\t" + formattedAuthor;
-    const formattedPoem = fullPoem.replace(/\n/g, "<br/>");
-    setPoem(formattedPoem);
-    setAuthor(AuthorLocal ? AuthorLocal : "");
-    setTitle(TitleLocal ? TitleLocal : "");
+    const storedPoem = localStorage.getItem('poem');
+    const parsedPoem = storedPoem ? JSON.parse(storedPoem) : '';
+    const AuthorLocal = localStorage.getItem('author');
+    const TitleLocal = localStorage.getItem('title');
+    const formattedAuthor = AuthorLocal ? `-  ${AuthorLocal}` : '';
+
+    const lines = parsedPoem.split('\n');
+    let isPreviousLineEmpty = false;
+
+    const formattedLines = lines.map((line : any , index : any) => {
+      // If the line is empty, use <span style="height: 10px; display: block;"></span>
+      // If the line is not empty but has \n, use <br/>
+      const isEmptyLine = line.trim() === '';
+      const lineContent = isEmptyLine ? '<span style="height: 10px; display: block;"></span>' : line;
+      // console.log(lineContent)
+      // Add <br/> only when there are consecutive non-empty lines
+      const resultLine =isEmptyLine ? lineContent : lineContent + '<br/>';
+      console.log(resultLine);
+      isPreviousLineEmpty = isEmptyLine;
+
+      return resultLine;
+    });
+
+    const fullPoem = formattedLines.join('\n') + '\n' + '\t\t'+'<span style="height: 6px; display: block;"></span>' + formattedAuthor;
+    setPoem(fullPoem);
+
+    setAuthor(AuthorLocal ? AuthorLocal : '');
+    setTitle(TitleLocal ? TitleLocal : '');
   }, []);
 
   const fetchImages = async (page: number) => {
@@ -297,29 +314,42 @@ function EditPage() {
             className="mx-auto"
             id="canvas-container"
           >
+            
             {selectedImage && (
               <img
-                src={selectedImage.src.large2x}
+                src={selectedImage.src.large2x?selectedImage.src.large2x:"https://images.pexels.com/photos/1547813/pexels-photo-1547813.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"}
                 alt={selectedImage.photographer}
                 onLoad={handleImageLoad}
               />
             )}
-            {/* {title && (
+            {title && (
               <div
                 style={{
-                  fontSize: "20px",
+                  fontSize: "22px",
                   fontWeight: "bold",
-                  marginTop: "10px",
+                  // marginTop: "10px",
+                  top : "20px",
+                  // width: "100%",
+                  zIndex : 3,
+                  userSelect: "none",
+                  position : "absolute",
+                  fontFamily : "serif",
+                  color: Array.from(textStyles)
+                      .find((style) => style.startsWith("text-color-"))
+                      ?.replace("text-color-", ""),
                 }}
                 dangerouslySetInnerHTML={{ __html: title }}
+                
               ></div>
-            )} */}
+            )}
+            
             {poem && (
               <Draggable
                 bounds="parent"
                 position={position}
                 onDrag={(e, data) => setPosition({ x: data.x, y: data.y })}
               >
+                
                 <PoemContainer
                   contentEditable={false}
                   appliedStyles={appliedStyles}
