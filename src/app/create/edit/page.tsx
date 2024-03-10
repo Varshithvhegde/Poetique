@@ -95,6 +95,7 @@ function EditPage() {
   const [isDownloading, setisDownloading] = useState<Boolean>(false);
   const router = useRouter();
 
+  let pending = false;
   const handleImageLoad = () => {
     setImageLoaded(true);
   };
@@ -133,12 +134,14 @@ function EditPage() {
         const blob = await toBlob(canvasContainerRef.current, {
           quality: 1.0,
         });
-  
+
         if (blob && navigator.share) {
           await navigator.share({
             title: "Poetique Image",
             text: "Check out this beautiful image poem!",
-            files: [new File([blob], "poetique-image.png", { type: "image/png" })],
+            files: [
+              new File([blob], "poetique-image.png", { type: "image/png" }),
+            ],
           });
         } else {
           // Fallback for browsers that do not support Web Share API
@@ -150,8 +153,7 @@ function EditPage() {
       console.error("Error sharing:", error);
     }
   };
-  
-  
+
   useEffect(() => {
     const storedPoem = localStorage.getItem("poem");
     console.log(storedPoem, "storedPoem");
