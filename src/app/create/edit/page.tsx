@@ -134,7 +134,7 @@ function EditPage() {
           quality: 1.0,
         });
   
-        if (navigator.share) {
+        if (blob && navigator.share) {
           await navigator.share({
             title: "Poetique Image",
             text: "Check out this beautiful image poem!",
@@ -150,6 +150,7 @@ function EditPage() {
       console.error("Error sharing:", error);
     }
   };
+  
   
   useEffect(() => {
     const storedPoem = localStorage.getItem("poem");
