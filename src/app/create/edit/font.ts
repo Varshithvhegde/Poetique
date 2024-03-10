@@ -83,6 +83,7 @@ export const MerriweatherFont: NextFont = Merriweather({
   subsets: ['latin'],
   display: 'swap',
   weight: '400',
+  style: 'italic'
 });
 
 export const RobotoSlabFont: NextFont = Roboto_Slab({

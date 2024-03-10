@@ -9,11 +9,11 @@ import { toPng } from "html-to-image";
 import React, { useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import styled from "styled-components";
-import { PlusCircledIcon } from "@radix-ui/react-icons";
+import { PlusCircledIcon, ReloadIcon } from "@radix-ui/react-icons";
 import { TextStyleToggleGroup } from "@/components/toggle-group/TextStyleToggleGroup";
 import { Label } from "@/components/ui/label";
-// import { toPng } from "html-to-image"; // Import the toPng function
-// Interface for PexelsImage
+import { useRouter } from "next/navigation";
+import { Share1Icon } from "@radix-ui/react-icons";
 interface PexelsImage {
   id: number;
   photographer: string;
@@ -92,11 +92,15 @@ function EditPage() {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [textStyles, setTextStyles] = useState<Set<string>>(new Set());
   const [selectedFont, setSelectedFont] = useState<string | null>(null);
+  const [isDownloading, setisDownloading] = useState<Boolean>(false);
+  const router = useRouter();
+
   const handleImageLoad = () => {
     setImageLoaded(true);
   };
 
   const handleDownloadClick = async () => {
+    setisDownloading(true);
     // Use the ref instead of document.getElementById
     if (canvasContainerRef.current) {
       try {
@@ -112,68 +116,72 @@ function EditPage() {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+        setisDownloading(false);
       } catch (error) {
+        setisDownloading(false);
         console.error("Error downloading image:", error);
       }
     }
+    setisDownloading(false);
   };
 
-  // const prepareURL = async () => {
-  //   const cardElement = canvasContainerRef.current;
-
-  //   if (!cardElement) return;
-
-  //   try {
-  //     // lazy load this package
-  //     const html2canvas = await import(
-  //       /* webpackPrefetch: true */ "html2canvas"
-  //     );
-
-  //     const result = await html2canvas.default(cardElement, options);
-  //     const asURL = result.toDataURL("image/png");
-  //     // as far as I know this is a quick and dirty solution
-  //     const anchor = document.createElement("a");
-  //     anchor.href = asURL;
-  //     anchor.download = "your-card.png";
-  //     anchor.click();
-  //     anchor.remove();
-  //    // maybe this part should set state with `setURLData(asURL)`
-  //    // and when that's set to something you show the download button
-  //    // which has `href=URLData`, so that people can click on it
-  //   } catch (reason) {
-  //     console.log(reason);
-  //   }
-  // };
+  const handleShareClick = async () => {
+    try {
+      // Check if the Web Share API is supported
+      if (navigator.share) {
+        await navigator.share({
+          title: "Poetique Image",
+          text: "Check out this beautiful image poem!",
+          url: "https://poetique.vercel.app/",
+        });
+      } else {
+        // Fallback for browsers that do not support Web Share API
+        // You can provide a link or any other sharing mechanism here
+        alert("Sharing is not supported on this browser.");
+      }
+    } catch (error) {
+      console.error("Error sharing:", error);
+    }
+  };
 
   useEffect(() => {
-    const storedPoem = localStorage.getItem('poem');
-    const parsedPoem = storedPoem ? JSON.parse(storedPoem) : '';
-    const AuthorLocal = localStorage.getItem('author');
-    const TitleLocal = localStorage.getItem('title');
-    const formattedAuthor = AuthorLocal ? `-  ${AuthorLocal}` : '';
+    const storedPoem = localStorage.getItem("poem");
+    console.log(storedPoem, "storedPoem");
 
-    const lines = parsedPoem.split('\n');
+    const parsedPoem = storedPoem ? JSON.parse(storedPoem) : "";
+    if (parsedPoem === "" || !parsedPoem || parsedPoem.trim() === "") {
+      console.log(parsedPoem, "parsedPoem");
+      router.push("/");
+    }
+    const AuthorLocal = localStorage.getItem("author");
+    const TitleLocal = localStorage.getItem("title");
+    const formattedAuthor = AuthorLocal ? `-  ${AuthorLocal}` : "";
+
+    const lines = parsedPoem.split("\n");
     let isPreviousLineEmpty = false;
 
-    const formattedLines = lines.map((line : any , index : any) => {
-      // If the line is empty, use <span style="height: 10px; display: block;"></span>
-      // If the line is not empty but has \n, use <br/>
-      const isEmptyLine = line.trim() === '';
-      const lineContent = isEmptyLine ? '<span style="height: 10px; display: block;"></span>' : line;
-      // console.log(lineContent)
-      // Add <br/> only when there are consecutive non-empty lines
-      const resultLine =isEmptyLine ? lineContent : lineContent + '<br/>';
+    const formattedLines = lines.map((line: any, index: any) => {
+      const isEmptyLine = line.trim() === "";
+      const lineContent = isEmptyLine
+        ? '<span style="height: 10px; display: block;"></span>'
+        : line;
+      const resultLine = isEmptyLine ? lineContent : lineContent + "<br/>";
       console.log(resultLine);
       isPreviousLineEmpty = isEmptyLine;
 
       return resultLine;
     });
 
-    const fullPoem = formattedLines.join('\n') + '\n' + '\t\t'+'<span style="height: 6px; display: block;"></span>' + formattedAuthor;
+    const fullPoem =
+      formattedLines.join("\n") +
+      "\n" +
+      "\t\t" +
+      '<span style="height: 6px; display: block;"></span>' +
+      formattedAuthor;
     setPoem(fullPoem);
 
-    setAuthor(AuthorLocal ? AuthorLocal : '');
-    setTitle(TitleLocal ? TitleLocal : '');
+    setAuthor(AuthorLocal ? AuthorLocal : "");
+    setTitle(TitleLocal ? TitleLocal : "");
   }, []);
 
   const fetchImages = async (page: number) => {
@@ -314,10 +322,13 @@ function EditPage() {
             className="mx-auto"
             id="canvas-container"
           >
-            
             {selectedImage && (
               <img
-                src={selectedImage.src.large2x?selectedImage.src.large2x:"https://images.pexels.com/photos/1547813/pexels-photo-1547813.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"}
+                src={
+                  selectedImage.src.large2x
+                    ? selectedImage.src.large2x
+                    : "https://images.pexels.com/photos/1547813/pexels-photo-1547813.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+                }
                 alt={selectedImage.photographer}
                 onLoad={handleImageLoad}
               />
@@ -328,28 +339,26 @@ function EditPage() {
                   fontSize: "22px",
                   fontWeight: "bold",
                   // marginTop: "10px",
-                  top : "20px",
+                  top: "20px",
                   // width: "100%",
-                  zIndex : 3,
+                  zIndex: 3,
                   userSelect: "none",
-                  position : "absolute",
-                  fontFamily : "serif",
+                  position: "absolute",
+                  fontFamily: "serif",
                   color: Array.from(textStyles)
-                      .find((style) => style.startsWith("text-color-"))
-                      ?.replace("text-color-", ""),
+                    .find((style) => style.startsWith("text-color-"))
+                    ?.replace("text-color-", ""),
                 }}
                 dangerouslySetInnerHTML={{ __html: title }}
-                
               ></div>
             )}
-            
+
             {poem && (
               <Draggable
                 bounds="parent"
                 position={position}
                 onDrag={(e, data) => setPosition({ x: data.x, y: data.y })}
               >
-                
                 <PoemContainer
                   contentEditable={false}
                   appliedStyles={appliedStyles}
@@ -383,9 +392,21 @@ function EditPage() {
             )}
           </ColoredCanvas>
         </div>
-        <Button onClick={handleDownloadClick} className="mt-4">
-          Download
-        </Button>
+        <div className="flex mt-4">
+          <Button onClick={handleDownloadClick} className="mr-2">
+            {isDownloading && (
+              <>
+                <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                Downloading
+              </>
+            )}
+            {!isDownloading && <>Download</>}
+          </Button>
+          <Button onClick={handleShareClick}>
+            Share
+            <Share1Icon className="mx-2" />
+          </Button>
+        </div>
       </div>
 
       <div className="w-full lg:w-1/2 p-8">

@@ -61,7 +61,7 @@ function Page() {
       </Label>
       <div className="flex items-end justify-end">
         <a
-          className=" text-blue-500 hover:text-blue-700 transition duration-300 cursor-pointer"
+          className=" text-blue-500 hover:text-blue-700 transition duration-300 cursor-pointer select-none"
           onClick={handleGenerateQuote}
         >
           Generate Random Quote
