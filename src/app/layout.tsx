@@ -36,7 +36,7 @@ export default function RootLayout({
       <meta property="og:type" content=""></meta>
       <meta
         property="og:image"
-        content="https://raw.githubusercontent.com/Varshithvhegde/jira-jnd/main/BG_simple.png?token=GHSAT0AAAAAACMOA5USTVDAEOLNOITC2FOQZPPGV4A"
+        content="https://firebasestorage.googleapis.com/v0/b/fileshare-37ebc.appspot.com/o/images%2FBG_simple.png?alt=media&token=9be196db-3755-40ff-b3e9-e4f72b8226c2"
       ></meta>
       <link rel="icon" href="/logo.ico" sizes="any" />
       <body className={inter.className}>
