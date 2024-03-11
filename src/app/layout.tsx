@@ -29,15 +29,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <meta
+        property="og:image"
+        content="https://firebasestorage.googleapis.com/v0/b/fileshare-37ebc.appspot.com/o/images%2FBG_simple.png?alt=media&token=9be196db-3755-40ff-b3e9-e4f72b8226c2"
+      />
+      <meta property="og:image:width" content="500" />
+      <meta property="og:image:height" content="500" />
       <meta property="og:title" content="Poetique"></meta>
       <meta property="og:site_name" content="Poetique"></meta>
       <meta property="og:url" content="https://poetique.vercel.app/"></meta>
       <meta property="og:description" content="Turn your words into art"></meta>
       <meta property="og:type" content=""></meta>
-      <meta
-        property="og:image"
-        content="https://firebasestorage.googleapis.com/v0/b/fileshare-37ebc.appspot.com/o/images%2FBG_simple.png?alt=media&token=9be196db-3755-40ff-b3e9-e4f72b8226c2"
-      ></meta>
       <link rel="icon" href="/logo.ico" sizes="any" />
       <body className={inter.className}>
         <NavBar></NavBar>
