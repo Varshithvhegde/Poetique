@@ -23,6 +23,8 @@ export default function Home() {
               alt="new"
               src={bg}
               className="object-cover absolute inset-0 size-full"
+              priority={true}
+              
             />
             <div className="flex relative flex-col justify-end pt-20 pr-20 pb-6 pl-10 max-md:px-5 max-md:max-w-full">
               <div className="mt-40 text-5xl tracking-tighter max-md:mt-10 max-md:mr-1 max-md:max-w-full max-md:text-4xl">
