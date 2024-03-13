@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import NavBar from "@/components/nav-bar/navbar";
 import logo from "../../public/logo.png";
+import { Analytics } from '@vercel/analytics/react';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -35,6 +36,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <NavBar></NavBar>
         {children}
+        <Analytics/>
       </body>
     </html>
   );
