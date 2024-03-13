@@ -17,6 +17,7 @@ export const metadata: Metadata = {
     siteName: "Poetique",
     images: './bg.png'
   },
+  manifest: "/manifest.json"
 };
 
 export default function RootLayout({
