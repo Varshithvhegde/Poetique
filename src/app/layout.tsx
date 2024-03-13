@@ -22,8 +22,8 @@ export const metadata: Metadata = {
         height : 500
       },
     ],
-    manifest: "/manifest.json"
   },
+  manifest: "/manifest.json"
 };
 
 export default function RootLayout({
