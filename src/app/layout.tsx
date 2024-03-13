@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     siteName: "Poetique",
     images: [
       {
-        url: "https://firebasestorage.googleapis.com/v0/b/fileshare-37ebc.appspot.com/o/images%2FBG_simple.png?alt=media&token=9be196db-3755-40ff-b3e9-e4f72b8226c2",
+        url: "https://i.ibb.co/Q9TWbSL/BG-simple.png",
         width : 500,
         height : 500
       },
