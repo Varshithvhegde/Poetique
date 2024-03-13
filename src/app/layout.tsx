@@ -15,9 +15,15 @@ export const metadata: Metadata = {
     title: "Poetique",
     description: "Turn your words into art",
     siteName: "Poetique",
-    images: './bg.png'
+    images: [
+      {
+        url: "https://firebasestorage.googleapis.com/v0/b/fileshare-37ebc.appspot.com/o/images%2FBG_simple.png?alt=media&token=9be196db-3755-40ff-b3e9-e4f72b8226c2",
+        width : 500,
+        height : 500
+      },
+    ],
+    manifest: "/manifest.json"
   },
-  manifest: "/manifest.json"
 };
 
 export default function RootLayout({
