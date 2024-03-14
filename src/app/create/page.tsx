@@ -45,8 +45,8 @@ function Page() {
 
       setPoemError(false);
       // Continue to the next page using useRouter from Next.js
-      setisNextLoading(false);
       router.push('/create/edit');
+      setisNextLoading(false);
     } else {
       // Display an error for the empty poem field
       setPoemError(true);

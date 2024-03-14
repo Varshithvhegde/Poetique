@@ -24,13 +24,15 @@ export default function Home() {
               src={bg}
               className="object-cover absolute inset-0 size-full"
               priority={true}
-              
+
             />
             <div className="flex relative flex-col justify-end pt-20 pr-20 pb-6 pl-10 max-md:px-5 max-md:max-w-full">
-              <div className="mt-40 text-5xl tracking-tighter max-md:mt-10 max-md:mr-1 max-md:max-w-full max-md:text-4xl">
+              <div className="mt-40 text-5xl tracking-tighter max-md:mt-10 max-md:mr-1 max-md:max-w-full max-md:text-4xl tracking-normal">
                 Turn your words into art
               </div>
-              <div className={"mt-2 leading-[150%] max-md:mr-1 max-md:max-w-full"+" "+MerriweatherFont.className}>
+
+
+              <div className={"mt-2 leading-[150%] max-md:mr-1 max-md:max-w-full" + " " + MerriweatherFont.className}>
                 Create beautiful visual poetry from your own words or from the
                 works of others. Add text to images, convert text to images, or
                 create your own image from scratch with our free image
