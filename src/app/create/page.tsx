@@ -5,12 +5,15 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
+import { ReloadIcon } from '@radix-ui/react-icons';
 
 function Page() {
   const [title, setTitle] = useState('');
   const [poem, setPoem] = useState('');
   const [author, setAuthor] = useState('');
   const [poemError, setPoemError] = useState(false);
+  const [isDownloading, setisDownloading] = useState(false);
+  const [isNextLoading, setisNextLoading] = useState(false);
   const router = useRouter();
 
   const isDataValid = poem.trim() !== '';
@@ -22,25 +25,35 @@ function Page() {
   }, [title, poem, author]);
 
   const handleGenerateQuote = async () => {
+    setisDownloading(true);
     try {
       const response = await fetch('https://api.quotable.io/random');
       const data = await response.json();
       setPoem(data.content);
       setAuthor(data.author);
+      setisDownloading(false);
     } catch (error) {
       console.error('Error fetching quote:', error);
+      setisDownloading(false);
     }
+    setisDownloading(false);
   };
 
   const handleNextClick = () => {
+    setisNextLoading(true);
     if (isDataValid) {
+
       setPoemError(false);
       // Continue to the next page using useRouter from Next.js
+      setisNextLoading(false);
       router.push('/create/edit');
     } else {
       // Display an error for the empty poem field
       setPoemError(true);
+      setisNextLoading(false);
     }
+    setisNextLoading(false);
+
   };
 
   return (
@@ -61,12 +74,20 @@ function Page() {
       </Label>
       <div className="flex items-end justify-end">
         <a
-          className=" text-blue-500 hover:text-blue-700 transition duration-300 cursor-pointer select-none"
+          className="text-blue-500 hover:text-blue-700 transition duration-300 cursor-pointer select-none"
           onClick={handleGenerateQuote}
         >
           Generate Random Quote
+          {isDownloading && (
+            <>
+              <span className="inline-block">
+                <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+              </span>
+            </>
+          )}
         </a>
       </div>
+
       <Textarea
         placeholder="Type your Poem or Inspirational Quote here."
         id="poem"
@@ -75,9 +96,8 @@ function Page() {
           setPoem(e.target.value);
           setPoemError(false);
         }}
-        className={`p-2 border rounded focus:outline-none ${
-          poemError ? 'border-red-500' : 'focus:border-blue-500'
-        } transition duration-300 max-h-[80vh] h-80`}
+        className={`p-2 border rounded focus:outline-none ${poemError ? 'border-red-500' : 'focus:border-blue-500'
+          } transition duration-300 max-h-[80vh] h-80`}
       />
       {poemError && (
         <p className="text-red-500 text-sm">Please fill in the Poem field.</p>
@@ -99,6 +119,13 @@ function Page() {
         className="max-w-screen-md p-3 bg-blue-500 text-white rounded hover:bg-blue-700 transition duration-300"
       >
         Next
+        {isNextLoading && (
+            <>
+              <span className="inline-block">
+                <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+              </span>
+            </>
+          )}
       </Button>
     </div>
   );
