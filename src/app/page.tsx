@@ -27,7 +27,7 @@ export default function Home() {
 
             />
             <div className="flex relative flex-col justify-end pt-20 pr-20 pb-6 pl-10 max-md:px-5 max-md:max-w-full">
-              <div className="mt-40 text-5xl tracking-tighter max-md:mt-10 max-md:mr-1 max-md:max-w-full max-md:text-4xl tracking-normal">
+              <div className="mt-40 text-5xl max-md:mt-10 max-md:mr-1 max-md:max-w-full max-md:text-4xl">
                 Turn your words into art
               </div>
 
