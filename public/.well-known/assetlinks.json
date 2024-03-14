@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "app.varshith.poetique",
+      "sha256_cert_fingerprints": [
+        "1C:A5:BD:52:62:B0:E5:84:96:43:0A:02:B1:E3:C5:40:D3:93:58:95:C0:D2:AF:7F:85:0B:A8:E1:DD:E8:92:31"
+      ]
+    }
+  }
+]
