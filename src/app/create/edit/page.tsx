@@ -167,6 +167,7 @@ function EditPage() {
   const [fontColor, setFontColor] = useState("#000000");
   const [fontSize, setFontSize] = useState(16);
   const [bold, setbold] = useState<boolean>(false);
+  const [debouncedsearch, setdebouncedsearch]= useState("");
   const router = useRouter();
 
   let pending = false;
@@ -210,7 +211,7 @@ function EditPage() {
         // Create a download link for the image
         const link = document.createElement("a");
         link.href = dataUrl || "";
-        link.download = "downloaded-image.png";
+        link.download = "your-poem.png";
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -293,6 +294,7 @@ function EditPage() {
 
   const fetchImages = async (page: number) => {
     try {
+      console.log("fetching")
       const response = await axios.get(
         `https://api.pexels.com/v1/search?query=${searchQuery}&page=${page}`,
         {
@@ -309,10 +311,20 @@ function EditPage() {
   };
 
   useEffect(() => {
-    // Reset currentPage to 1 when searchQuery changes
     setCurrentPage(1);
-    fetchImages(1);
+    // Reset currentPage to 1 when searchQuery changes
+    const timeout = setTimeout(()=>{
+      setdebouncedsearch(searchQuery)
+    },500)
+
+    return () => {
+      clearTimeout(timeout)
+    }
   }, [searchQuery]);
+
+  useEffect(()=>{
+    fetchImages(currentPage);
+  },[debouncedsearch])
 
   useEffect(() => {
     fetchImages(currentPage);
