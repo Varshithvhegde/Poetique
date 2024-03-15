@@ -9,7 +9,7 @@ import {
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import bg from "../../public/bg.png"
+import bg from "../../public/bg.png";
 import { MerriweatherFont } from "./create/edit/font";
 export default function Home() {
   return (
@@ -24,15 +24,19 @@ export default function Home() {
               src={bg}
               className="object-cover absolute inset-0 size-full"
               priority={true}
-
             />
             <div className="flex relative flex-col justify-end pt-20 pr-20 pb-6 pl-10 max-md:px-5 max-md:max-w-full">
               <div className="mt-40 text-5xl max-md:mt-10 max-md:mr-1 max-md:max-w-full max-md:text-4xl">
                 Turn your words into art
               </div>
 
-
-              <div className={"mt-2 leading-[150%] max-md:mr-1 max-md:max-w-full" + " " + MerriweatherFont.className}>
+              <div
+                className={
+                  "mt-2 leading-[150%] max-md:mr-1 max-md:max-w-full" +
+                  " " +
+                  MerriweatherFont.className
+                }
+              >
                 Create beautiful visual poetry from your own words or from the
                 works of others. Add text to images, convert text to images.
               </div>
@@ -94,7 +98,13 @@ export default function Home() {
           </div>
 
           <div className="mt-14 text-base leading-6 text-center text-gray-500 whitespace-nowrap">
-            © 2022 Poetique. All rights reserved.
+            © 2024{" "}
+            <Link href="https://github.com/Varshithvhegde" legacyBehavior>
+              <a className="text-blue-500 hover:underline cursor-pointer">
+                Varshith V Hegde
+              </a>
+            </Link>
+            . All rights reserved.
           </div>
 
           <div className="self-stretch mt-10 w-full bg-white min-h-[20px]" />
