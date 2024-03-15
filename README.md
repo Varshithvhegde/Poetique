@@ -1,6 +1,8 @@
 
 <h1 align="center" style="font-size:50px;"><a href="https://poetique.vercel.app">Poetique</a></h1>  
 
+![screenshot-rocks](https://github.com/Varshithvhegde/Poetique/assets/80502833/404aaf1b-2ab0-4c8e-ae13-a96ed79b03e7)
+
 Poetique is an innovative online platform that allows users to transform words into stunning visual poetry effortlessly. Whether you're a seasoned poet or just starting out, Poetique offers a plethora of tools and resources to help you craft captivating pieces of art from your own words or from existing literary works. With a vast library of over 80,000 images to choose from, you can easily find the perfect visuals to complement your poetry, adding depth and meaning to your creations.
 
 ## Get Started
