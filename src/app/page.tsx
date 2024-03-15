@@ -34,9 +34,7 @@ export default function Home() {
 
               <div className={"mt-2 leading-[150%] max-md:mr-1 max-md:max-w-full" + " " + MerriweatherFont.className}>
                 Create beautiful visual poetry from your own words or from the
-                works of others. Add text to images, convert text to images, or
-                create your own image from scratch with our free image
-                generator.
+                works of others. Add text to images, convert text to images.
               </div>
               <div className="flex flex-col justify-center px-5 py-3 mt-14 tracking-wide whitespace-nowrap bg-indigo-700 rounded-3xl leading-[150%] w-[155px] max-md:mt-10">
                 <div className="justify-center bg-indigo-700 pointer">

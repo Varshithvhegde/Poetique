@@ -166,7 +166,7 @@ function EditPage() {
   const [isDownloading, setisDownloading] = useState<Boolean>(false);
   const [fontColor, setFontColor] = useState("#000000");
   const [fontSize, setFontSize] = useState(16);
-  const [bold,setbold]= useState<boolean>(false);
+  const [bold, setbold] = useState<boolean>(false);
   const router = useRouter();
 
   let pending = false;
@@ -186,15 +186,15 @@ function EditPage() {
     handleTextStyleToggle(`font-size-${size}`);
   };
 
-  const handleBoldText = ()=>{
+  const handleBoldText = () => {
     handleTextStyleToggle("bold");
-    if(bold){
+    if (bold) {
       setbold(false);
     }
-    else{
+    else {
       setbold(true);
     }
-    
+
   }
 
   const handleDownloadClick = async () => {
@@ -324,7 +324,6 @@ function EditPage() {
 
   const handleImageClick = (image: PexelsImage) => {
     setSelectedImage(image);
-    // setBackgroundColor("#b3e0ff");
   };
 
   const handleColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -335,18 +334,23 @@ function EditPage() {
   const handleImageOpacityChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    if (selectedImage != null) {
+      setBackgroundColor("#FFFFFF");
+    }
     setImageOpacity(parseFloat(event.target.value));
   };
 
   const handleImageBlurChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    if (selectedImage != null) {
+      setBackgroundColor("#FFFFFF");
+    }
     setImageBlur(parseFloat(event.target.value));
   };
 
   const handleTextStyleToggle = (style: string) => {
     const updatedStyles = new Set(textStyles);
-
     // Handle text align styles
     if (style.includes("align-")) {
       updatedStyles.forEach((existingStyle) => {
@@ -355,7 +359,6 @@ function EditPage() {
         }
       });
     }
-
     // Handle text color style
     if (style.startsWith("text-color-")) {
       updatedStyles.forEach((existingStyle) => {
@@ -478,10 +481,10 @@ function EditPage() {
                     textAlign: textStyles.has("align-center")
                       ? "center"
                       : textStyles.has("align-left")
-                      ? "left"
-                      : textStyles.has("align-right")
-                      ? "right"
-                      : "center",
+                        ? "left"
+                        : textStyles.has("align-right")
+                          ? "right"
+                          : "center",
                     zIndex: 3,
                     fontWeight: textStyles.has("bold") ? "bold" : "normal",
                     fontStyle: textStyles.has("italic") ? "italic" : "normal",
@@ -630,140 +633,140 @@ function EditPage() {
                 onTextStyleToggle={handleTextStyleToggle}
                 setSelectedFontClass={setSelectedFont}
               /> */}
-                  <div className="flex flex-col items-center space-y-4">
-      {/* First Line: Font Color and Font Size */}
-      <div className="flex items-center space-x-6">
-        <Label className="flex items-center cursor-pointer">Font Color:</Label>
-        <Input
-          type="color"
-          value={fontColor}
-          onChange={handleFontColorChange}
-          className="p-1 border border-gray-300 rounded ml-2 w-[80px]"
-        />
-        <Label className="flex items-center cursor-pointer">Font Size:</Label>
-        <div className="w-[100px]">
-          <Select
-            value={fontSize.toString()}
-            onValueChange={(newValue) => handleFontSizeChange(newValue)}
-          >
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {fontSizeOptions.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
+              <div className="flex flex-col items-center space-y-4">
+                {/* First Line: Font Color and Font Size */}
+                <div className="flex items-center space-x-6">
+                  <Label className="flex items-center cursor-pointer">Font Color:</Label>
+                  <Input
+                    type="color"
+                    value={fontColor}
+                    onChange={handleFontColorChange}
+                    className="p-1 border border-gray-300 rounded ml-2 w-[80px]"
+                  />
+                  <Label className="flex items-center cursor-pointer">Font Size:</Label>
+                  <div className="w-[100px]">
+                    <Select
+                      value={fontSize.toString()}
+                      onValueChange={(newValue) => handleFontSizeChange(newValue)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {fontSizeOptions.map((option) => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
 
-      {/* Second Line: Bold, Italic, and Text Alignment */}
-      <div className="flex items-center space-x-4">
-        <ToggleGroup type="multiple" variant="outline">
-          <ToggleGroupItem
-            value="bold"
-            aria-label="Toggle bold"
-            onClick={() => handleBoldText()}
-          >
-            <FontBoldIcon className="h-4 w-4" />
-          </ToggleGroupItem>
-          <ToggleGroupItem
-            value="italic"
-            aria-label="Toggle italic"
-            onClick={() => handleTextStyleToggle("italic")}
-          >
-            <FontItalicIcon className="h-4 w-4" />
-          </ToggleGroupItem>
-          <ToggleGroupItem
-            value="underline"
-            aria-label="Toggle underline"
-            onClick={() => handleTextStyleToggle("underline")}
-          >
-            <UnderlineIcon className="h-4 w-4" />
-          </ToggleGroupItem>
-        </ToggleGroup>
+                {/* Second Line: Bold, Italic, and Text Alignment */}
+                <div className="flex items-center space-x-4">
+                  <ToggleGroup type="multiple" variant="outline">
+                    <ToggleGroupItem
+                      value="bold"
+                      aria-label="Toggle bold"
+                      onClick={() => handleBoldText()}
+                    >
+                      <FontBoldIcon className="h-4 w-4" />
+                    </ToggleGroupItem>
+                    <ToggleGroupItem
+                      value="italic"
+                      aria-label="Toggle italic"
+                      onClick={() => handleTextStyleToggle("italic")}
+                    >
+                      <FontItalicIcon className="h-4 w-4" />
+                    </ToggleGroupItem>
+                    <ToggleGroupItem
+                      value="underline"
+                      aria-label="Toggle underline"
+                      onClick={() => handleTextStyleToggle("underline")}
+                    >
+                      <UnderlineIcon className="h-4 w-4" />
+                    </ToggleGroupItem>
+                  </ToggleGroup>
 
-        <ToggleGroup type="single">
-          <ToggleGroupItem
-            value="align-left"
-            aria-label="Align left"
-            onClick={() => handleTextStyleToggle("align-left")}
-          >
-            <TextAlignLeftIcon className="h-4 w-4" />
-          </ToggleGroupItem>
-          <ToggleGroupItem
-            value="align-center"
-            aria-label="Align center"
-            onClick={() => handleTextStyleToggle("align-center")}
-          >
-            <TextAlignCenterIcon className="h-4 w-4" />
-          </ToggleGroupItem>
-          <ToggleGroupItem
-            value="align-right"
-            aria-label="Align right"
-            onClick={() => handleTextStyleToggle("align-right")}
-          >
-            <TextAlignRightIcon className="h-4 w-4" />
-          </ToggleGroupItem>
-        </ToggleGroup>
-      </div>
-      {/* ScrollArea for Font Options */}
-      <Label className="flex items-center cursor-pointer">Font Family:</Label>
+                  <ToggleGroup type="single">
+                    <ToggleGroupItem
+                      value="align-left"
+                      aria-label="Align left"
+                      onClick={() => handleTextStyleToggle("align-left")}
+                    >
+                      <TextAlignLeftIcon className="h-4 w-4" />
+                    </ToggleGroupItem>
+                    <ToggleGroupItem
+                      value="align-center"
+                      aria-label="Align center"
+                      onClick={() => handleTextStyleToggle("align-center")}
+                    >
+                      <TextAlignCenterIcon className="h-4 w-4" />
+                    </ToggleGroupItem>
+                    <ToggleGroupItem
+                      value="align-right"
+                      aria-label="Align right"
+                      onClick={() => handleTextStyleToggle("align-right")}
+                    >
+                      <TextAlignRightIcon className="h-4 w-4" />
+                    </ToggleGroupItem>
+                  </ToggleGroup>
+                </div>
+                {/* ScrollArea for Font Options */}
+                <Label className="flex items-center cursor-pointer">Font Family:</Label>
 
-      <ScrollArea className="overflow-x-auto h-[300px] rounded-md border p-4 w-[80%] mx-auto">
-        {/* Render font options using the defined font configurations */}
-        {[
-          { font: OpenSans, label: "Open Sans" },
-          { font: RobotoFont, label: "Roboto" },
-          { font: LatoFont, label: "Lato" },
-          { font: MontserratFont, label: "Montserrat" },
-          { font: PoppinsFont, label: "Poppins" },
-          { font: OswaldFont, label: "Oswald" },
-          { font: PlayfairDisplayFont, label: "Playfair Display" },
-          { font: RalewayFont, label: "Raleway" },
-          { font: MerriweatherFont, label: "Merriweather" },
-          { font: TangerineFont, label: "Tangerine" },
-          // Add other fonts as needed...
-          { font: RobotoSlabFont, label: "Roboto Slab" },
-          { font: LoraFont, label: "Lora" },
-          { font: InterFont, label: "Inter" },
-          { font: NotoSansFont, label: "Noto Sans" },
-          { font: NotoSansKannadaFont, label: "Noto Sans Kannada" },
-          { font: AnekKannadaFont, label: "Anek Kannada" },
-          { font: TiroKannadaFont, label: "Tiro Kannada" },
-          { font: AkayaKanadakaFont, label: "Akaya Kanadaka" },
-          { font: NotoSerifKannadaFont, label: "Noto Serif Kannada" },
-          { font: HindSiliguriFont, label: "Hind Siliguri" },
-          { font: TiroDevanagariHindiFont, label: "Tiro Devanagari Hindi" },
-          { font: PTSansFont, label: "PT Sans" },
-          { font: SourceSansProFont, label: "Source Sans Pro" },
-          { font: AlegreyaFont, label: "Alegreya" },
-          { font: NunitoFont, label: "Nunito" },
-          { font: RubikFont, label: "Rubik" },
-          { font: WorkSansFont, label: "Work Sans" },
-          { font: CourierPrimeFont, label: "Courier Prime" },
-          { font: LibreFranklinFont, label: "Libre Franklin" },
-          { font: MonofettFont, label: "Monofett" },
-          { font: NotoSerifFont, label: "Noto Serif" },
-        ].map(({ font, label }) => (
-          <div key={label} className="mb-2">
-            <div>
-            <label className="flex items-center justify-center cursor-pointer">
-                <span
-                  className={`${font.className}`}
-                  onClick={() => setSelectedFont(font.className)}
-                >
-                  {label}
-                </span>
-              </label>
-            </div>
-          </div>
-        ))}
-      </ScrollArea>
-    </div>
+                <ScrollArea className="overflow-x-auto h-[300px] rounded-md border p-4 w-[80%] mx-auto">
+                  {/* Render font options using the defined font configurations */}
+                  {[
+                    { font: OpenSans, label: "Open Sans" },
+                    { font: RobotoFont, label: "Roboto" },
+                    { font: LatoFont, label: "Lato" },
+                    { font: MontserratFont, label: "Montserrat" },
+                    { font: PoppinsFont, label: "Poppins" },
+                    { font: OswaldFont, label: "Oswald" },
+                    { font: PlayfairDisplayFont, label: "Playfair Display" },
+                    { font: RalewayFont, label: "Raleway" },
+                    { font: MerriweatherFont, label: "Merriweather" },
+                    { font: TangerineFont, label: "Tangerine" },
+                    // Add other fonts as needed...
+                    { font: RobotoSlabFont, label: "Roboto Slab" },
+                    { font: LoraFont, label: "Lora" },
+                    { font: InterFont, label: "Inter" },
+                    { font: NotoSansFont, label: "Noto Sans" },
+                    { font: NotoSansKannadaFont, label: "Noto Sans Kannada" },
+                    { font: AnekKannadaFont, label: "Anek Kannada" },
+                    { font: TiroKannadaFont, label: "Tiro Kannada" },
+                    { font: AkayaKanadakaFont, label: "Akaya Kanadaka" },
+                    { font: NotoSerifKannadaFont, label: "Noto Serif Kannada" },
+                    { font: HindSiliguriFont, label: "Hind Siliguri" },
+                    { font: TiroDevanagariHindiFont, label: "Tiro Devanagari Hindi" },
+                    { font: PTSansFont, label: "PT Sans" },
+                    { font: SourceSansProFont, label: "Source Sans Pro" },
+                    { font: AlegreyaFont, label: "Alegreya" },
+                    { font: NunitoFont, label: "Nunito" },
+                    { font: RubikFont, label: "Rubik" },
+                    { font: WorkSansFont, label: "Work Sans" },
+                    { font: CourierPrimeFont, label: "Courier Prime" },
+                    { font: LibreFranklinFont, label: "Libre Franklin" },
+                    { font: MonofettFont, label: "Monofett" },
+                    { font: NotoSerifFont, label: "Noto Serif" },
+                  ].map(({ font, label }) => (
+                    <div key={label} className="mb-2">
+                      <div>
+                        <label className="flex items-center justify-center cursor-pointer">
+                          <span
+                            className={`${font.className}`}
+                            onClick={() => setSelectedFont(font.className)}
+                          >
+                            {label}
+                          </span>
+                        </label>
+                      </div>
+                    </div>
+                  ))}
+                </ScrollArea>
+              </div>
             </div>
           </TabsContent>
         </Tabs>
