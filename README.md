@@ -1,6 +1,5 @@
 
-# [Poetique](https://poetique.vercel.app/)
-![screenshot-rocks](https://github.com/Varshithvhegde/Poetique/assets/80502833/f56a5d37-8e48-4e65-8c67-4415b5ba7cb0)
+<h1 align="center" style="font-size:50px;"><a href="https://poetique.vercel.app">Poetique</a></h1>  
 
 Poetique is an innovative online platform that allows users to transform words into stunning visual poetry effortlessly. Whether you're a seasoned poet or just starting out, Poetique offers a plethora of tools and resources to help you craft captivating pieces of art from your own words or from existing literary works. With a vast library of over 80,000 images to choose from, you can easily find the perfect visuals to complement your poetry, adding depth and meaning to your creations.
 
@@ -39,6 +38,17 @@ What sets Poetique apart from other platforms is its commitment to accessibility
 - **UI Components**: Custom components such as `Pagination`, `Button`, `Input`, `ScrollArea`, `Tabs`, etc.
 - **Fonts**: Various font options provided by Radix UI and custom font selections
 - **Styling**: Styled Components for dynamic styling
+
+
+### Tech Stack
+
+1. **Next.js 14**: Next.js is a React framework that enables server-side rendering, static site generation, and routing for React-based web applications. It simplifies the development process by providing built-in features like code splitting, hot module replacement, and optimized production builds. Version 14 of Next.js brings new enhancements and improvements to the framework.
+
+2. **Shadcn**: Shadcn is likely a typo or an internal library specific to the project. Without further context or documentation, it's challenging to provide specific information about it. However, it might be related to styling, animations, or other UI-related functionalities.
+
+3. **Aceternity UI**: Aceternity UI seems to be another custom or third-party UI library used in the project. Again, without additional information, it's difficult to provide specific details about its features or functionalities. It might include components, styles, or utilities designed to enhance the user interface of the application.
+
+4. **Pexels Image API**: Pexels Image API is a third-party API used to fetch images for the Poetique application. It provides access to a vast collection of high-quality, royalty-free images that users can use to enhance their visual poetry creations. The API allows users to search for images based on keywords and provides various endpoints for retrieving image data.
 
 ## Installation
 
@@ -100,5 +110,3 @@ This project is licensed under the [MIT License](LICENSE).
 - **Shadcn**: Shadcn helped in creating beautiful shadow effects for UI elements.
 
 ---
-
-Feel free to customize the README according to your project's specific details and requirements.
