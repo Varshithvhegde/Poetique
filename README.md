@@ -50,6 +50,212 @@ What sets Poetique apart from other platforms is its commitment to accessibility
 
 4. **Pexels Image API**: Pexels Image API is a third-party API used to fetch images for the Poetique application. It provides access to a vast collection of high-quality, royalty-free images that users can use to enhance their visual poetry creations. The API allows users to search for images based on keywords and provides various endpoints for retrieving image data.
 
+## Main Code Snippets 
+
+### 1. Image Search and Selection:
+
+**Description:** This functionality allows users to search for images based on a query and select an image to use as the background for their poem. It utilizes the Pexels API to fetch images based on the user's search query.
+
+**How it works:**
+- The component maintains state variables such as `images`, `selectedImage`, and `searchQuery` using React's `useState` hook.
+- The `fetchImages` function is an asynchronous function that sends a GET request to the Pexels API endpoint with the search query and page number.
+- Upon receiving a response, it updates the `images` state with the fetched photos and sets the `totalPages` state with the total number of pages of results.
+- When a user clicks on an image, the `handleImageClick` function sets the selected image in the state.
+
+```javascript
+const [images, setImages] = useState<PexelsImage[]>([]);
+const [selectedImage, setSelectedImage] = useState<PexelsImage | null>(null);
+const [searchQuery, setSearchQuery] = useState("nature");
+
+const fetchImages = async (page: number) => {
+  try {
+    const response = await axios.get(
+      `https://api.pexels.com/v1/search?query=${searchQuery}&page=${page}`,
+      {
+        headers: {
+          Authorization: process.env.NEXT_PUBLIC_PEXELS_API_KEY,
+        },
+      }
+    );
+    setImages(response.data.photos);
+    setTotalPages(response.data.total_pages);
+  } catch (error) {
+    console.error("Error fetching images:", error);
+  }
+};
+
+const handleImageClick = (image: PexelsImage) => {
+  setSelectedImage(image);
+};
+```
+
+### 2. Text Styling:
+
+**Description:** This feature enables users to style text by changing font color, font size, font family, and applying bold, italic, or underline formatting.
+
+**How it works:**
+- The component maintains state variables such as `textStyles`, `fontColor`, `fontSize`, `bold`, and `selectedFont` using React's `useState` hook.
+- Functions like `handleFontColorChange`, `handleFontSizeChange`, and `handleBoldText` update their respective state variables when the user interacts with the UI elements.
+- The `handleTextStyleToggle` function is responsible for adding or removing text styles from the `textStyles` set based on user actions.
+
+    ```javascript
+    const [textStyles, setTextStyles] = useState<Set<string>>(new Set());
+    const [fontColor, setFontColor] = useState("#000000");
+    const [fontSize, setFontSize] = useState(16);
+    const [bold, setBold] = useState<boolean>(false);
+    const [selectedFont, setSelectedFont] = useState<string | null>(null);
+
+    const handleFontColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const color = e.target.value;
+    setFontColor(color);
+    handleTextStyleToggle(`text-color-${color}`);
+    };
+
+    const handleFontSizeChange = (value: string) => {
+    const size = parseInt(value, 10);
+    setFontSize(size);
+    handleTextStyleToggle(`font-size-${size}`);
+    };
+
+    const handleBoldText = () => {
+    setBold(!bold);
+    handleTextStyleToggle("bold");
+    };
+    ```
+
+### 3. Image Rendering and Styling:
+
+**Description:** This functionality renders the selected image and allows users to apply styling options such as background color, opacity, and blur.
+
+**How it works:**
+- The component maintains state variables such as `backgroundColor`, `imageOpacity`, and `imageBlur` using React's `useState` hook.
+- Functions like `handleColorChange`, `handleImageOpacityChange`, and `handleImageBlurChange` update their respective state variables when the user interacts with the UI elements.
+
+    ```javascript
+    const [backgroundColor, setBackgroundColor] = useState("#b3e0ff");
+    const [imageOpacity, setImageOpacity] = useState(1);
+    const [imageBlur, setImageBlur] = useState(0);
+
+    const handleColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setBackgroundColor(event.target.value);
+    setSelectedImage(null);
+    };
+
+    const handleImageOpacityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setImageOpacity(parseFloat(event.target.value));
+    };
+
+    const handleImageBlurChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setImageBlur(parseFloat(event.target.value));
+    };
+    ```
+
+### 4. Download and Share:
+
+**Description:** This feature enables users to download the created image or share it via supported platforms.
+
+**How it works:**
+- The `handleDownloadClick` function initiates the download process by converting the content of the canvas container to an image using `toPng` from the `html-to-image` library. It then creates a download link for the image and triggers a download.
+- The `handleShareClick` function allows users to share the image using the Web Share API if supported by the browser. It converts the content of the canvas container to a Blob and shares it using the `navigator.share` method.
+
+    ```javascript
+    const handleDownloadClick = async () => {
+    setisDownloading(true);
+    if (canvasContainerRef.current) {
+        try {
+        const dataUrl = await toPng(canvasContainerRef.current, {
+            quality: 1.0,
+        });
+        const link = document.createElement("a");
+        link.href = dataUrl || "";
+        link.download = "downloaded-image.png";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setisDownloading(false);
+        } catch (error) {
+        setisDownloading(false);
+        console.error("Error downloading image:", error);
+        }
+    }
+    setisDownloading(false);
+    };
+
+    const handleShareClick = async () => {
+    try {
+        if (canvasContainerRef.current) {
+        const blob = await toBlob(canvasContainerRef.current, {
+            quality: 1.0,
+        });
+        if (blob && navigator.share) {
+            await navigator.share({
+            title: "Poetique Image",
+            text: "Check out this beautiful image poem!",
+            files: [
+                new File([blob], "poetique-image.png", { type: "image/png" }),
+            ],
+            });
+        } else {
+            alert("Sharing is not supported on this browser.");
+        }
+        }
+    } catch (error) {
+        console.error("Error sharing:", error);
+    }
+    };
+    ```
+
+### 5. Handling Style Changes:
+
+**Description:** This functionality allows users to toggle text styles such as font color, font size, and alignment.
+
+**How it works:**
+- The `handleTextStyleToggle` function manages the addition and removal of text styles from the `textStyles` set based on user actions.
+- It parses the style string to determine the type of style to apply (e.g., font color, font size) and updates the relevant state variables accordingly.
+
+    ```javascript
+    const handleTextStyleToggle = (style: string) => {
+    const updatedStyles = new Set(textStyles);
+
+    if (style.includes("align-")) {
+        updatedStyles.forEach((existingStyle) => {
+        if (existingStyle.startsWith("align-")) {
+            updatedStyles.delete(existingStyle);
+        }
+        });
+    }
+
+    if (style.startsWith("text-color-")) {
+        updatedStyles.forEach((existingStyle) => {
+        if (existingStyle.startsWith("text-color
+
+    -")) {
+            updatedStyles.delete(existingStyle);
+        }
+        });
+    }
+
+    if (updatedStyles.has(style)) {
+        updatedStyles.delete(style);
+    } else {
+        updatedStyles.add(style);
+    }
+
+    if (style.startsWith("font-size-")) {
+        updatedStyles.forEach((existingStyle) => {
+        if (existingStyle.startsWith("font-size-")) {
+            updatedStyles.delete(existingStyle);
+        }
+        });
+        setFontSize(parseInt(style.replace("font-size-", ""), 10));
+    }
+
+    setTextStyles(new Set(Array.from(updatedStyles)));
+    };
+    ```
+
+These functionalities collectively enable users to create visually appealing poems by combining images and styled text, providing them with a versatile and user-friendly platform for creative expression.
+
 ## Installation
 
 1. Clone the repository:
