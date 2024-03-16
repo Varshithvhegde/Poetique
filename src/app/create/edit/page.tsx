@@ -167,7 +167,7 @@ function EditPage() {
   const [fontColor, setFontColor] = useState("#000000");
   const [fontSize, setFontSize] = useState(16);
   const [bold, setbold] = useState<boolean>(false);
-  const [debouncedsearch, setdebouncedsearch]= useState("");
+  const [debouncedsearch, setdebouncedsearch] = useState("");
   const router = useRouter();
 
   let pending = false;
@@ -191,12 +191,10 @@ function EditPage() {
     handleTextStyleToggle("bold");
     if (bold) {
       setbold(false);
-    }
-    else {
+    } else {
       setbold(true);
     }
-
-  }
+  };
 
   const handleDownloadClick = async () => {
     setisDownloading(true);
@@ -294,7 +292,7 @@ function EditPage() {
 
   const fetchImages = async (page: number) => {
     try {
-      console.log("fetching")
+      console.log("fetching");
       const response = await axios.get(
         `https://api.pexels.com/v1/search?query=${searchQuery}&page=${page}`,
         {
@@ -313,18 +311,18 @@ function EditPage() {
   useEffect(() => {
     setCurrentPage(1);
     // Reset currentPage to 1 when searchQuery changes
-    const timeout = setTimeout(()=>{
-      setdebouncedsearch(searchQuery)
-    },500)
+    const timeout = setTimeout(() => {
+      setdebouncedsearch(searchQuery);
+    }, 500);
 
     return () => {
-      clearTimeout(timeout)
-    }
+      clearTimeout(timeout);
+    };
   }, [searchQuery]);
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchImages(currentPage);
-  },[debouncedsearch])
+  }, [debouncedsearch]);
 
   useEffect(() => {
     fetchImages(currentPage);
@@ -493,10 +491,10 @@ function EditPage() {
                     textAlign: textStyles.has("align-center")
                       ? "center"
                       : textStyles.has("align-left")
-                        ? "left"
-                        : textStyles.has("align-right")
-                          ? "right"
-                          : "center",
+                      ? "left"
+                      : textStyles.has("align-right")
+                      ? "right"
+                      : "center",
                     zIndex: 3,
                     fontWeight: textStyles.has("bold") ? "bold" : "normal",
                     fontStyle: textStyles.has("italic") ? "italic" : "normal",
@@ -552,8 +550,8 @@ function EditPage() {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
 
-            <div className="flex items-center mb-4">
-              <div className="flex items-center mr-4">
+            <div className="flex flex-col md:flex-row mb-4">
+              <div className="flex items-center mb-2 md:mb-0">
                 <Label htmlFor="background" className="mr-2">
                   Background:
                 </Label>
@@ -567,9 +565,9 @@ function EditPage() {
                   id="background"
                 />
               </div>
-              <div className="flex items-center mr-4">
+              <div className="flex items-center mb-2 md:mb-0">
                 <Label htmlFor="imageOpacitySlider" className="mr-2">
-                  Opacity:{" "}
+                  Opacity:
                 </Label>
                 <input
                   id="imageOpacitySlider"
@@ -579,13 +577,13 @@ function EditPage() {
                   step="0.01"
                   value={imageOpacity}
                   onChange={handleImageOpacityChange}
-                  className="ml-2"
+                  className="ml-2 w-[200px] md:w-auto"
                 />
               </div>
             </div>
-            <div className="flex items-center  mb-4">
-              <Label htmlFor="imageBlurSlider" className="mr-2">
-                Image Blur:{" "}
+            <div className="flex flex-row md:flex-row items-center mb-4">
+              <Label htmlFor="imageBlurSlider" className="mr-2 md:mr-4">
+                Image Blur:
               </Label>
               <input
                 id="imageBlurSlider"
@@ -595,10 +593,11 @@ function EditPage() {
                 step="0.1"
                 value={imageBlur}
                 onChange={handleImageBlurChange}
-                className="ml-2 w-[250px]"
+                className="ml-2 w-[200px] md:w-[250px]"
               />
             </div>
-            <ScrollArea className="overflow-x-auto h-[300px] rounded-md border p-4">
+
+            <ScrollArea className="overflow-x-auto h-[300px] rounded-md border p-4 mt-2">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {/* Special handling for the first image */}
                 <div className="cursor-pointer hover:shadow-lg flex flex-col items-center justify-center">
@@ -626,7 +625,7 @@ function EditPage() {
                     key={image.id}
                     src={image.src.tiny}
                     alt={image.photographer}
-                    className="cursor-pointer hover:shadow-lg"
+                    className="cursor-pointer hover:shadow-lg w-[100%]md:w-auto"
                     onClick={() => handleImageClick(image)}
                   />
                 ))}
@@ -648,18 +647,24 @@ function EditPage() {
               <div className="flex flex-col items-center space-y-4">
                 {/* First Line: Font Color and Font Size */}
                 <div className="flex items-center space-x-6">
-                  <Label className="flex items-center cursor-pointer">Font Color:</Label>
+                  <Label className="flex items-center cursor-pointer">
+                    Font Color:
+                  </Label>
                   <Input
                     type="color"
                     value={fontColor}
                     onChange={handleFontColorChange}
                     className="p-1 border border-gray-300 rounded ml-2 w-[80px]"
                   />
-                  <Label className="flex items-center cursor-pointer">Font Size:</Label>
+                  <Label className="flex items-center cursor-pointer">
+                    Font Size:
+                  </Label>
                   <div className="w-[100px]">
                     <Select
                       value={fontSize.toString()}
-                      onValueChange={(newValue) => handleFontSizeChange(newValue)}
+                      onValueChange={(newValue) =>
+                        handleFontSizeChange(newValue)
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue />
@@ -726,7 +731,9 @@ function EditPage() {
                   </ToggleGroup>
                 </div>
                 {/* ScrollArea for Font Options */}
-                <Label className="flex items-center cursor-pointer">Font Family:</Label>
+                <Label className="flex items-center cursor-pointer">
+                  Font Family:
+                </Label>
 
                 <ScrollArea className="overflow-x-auto h-[300px] rounded-md border p-4 w-[80%] mx-auto">
                   {/* Render font options using the defined font configurations */}
@@ -752,7 +759,10 @@ function EditPage() {
                     { font: AkayaKanadakaFont, label: "Akaya Kanadaka" },
                     { font: NotoSerifKannadaFont, label: "Noto Serif Kannada" },
                     { font: HindSiliguriFont, label: "Hind Siliguri" },
-                    { font: TiroDevanagariHindiFont, label: "Tiro Devanagari Hindi" },
+                    {
+                      font: TiroDevanagariHindiFont,
+                      label: "Tiro Devanagari Hindi",
+                    },
                     { font: PTSansFont, label: "PT Sans" },
                     { font: SourceSansProFont, label: "Source Sans Pro" },
                     { font: AlegreyaFont, label: "Alegreya" },
